@@ -5,8 +5,6 @@
 import os
 
 # Import 3rd party packages
-import _pickle as cPickle
-import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
 
@@ -27,7 +25,7 @@ root = os.path.dirname(os.getcwd())
 # 	# root +'\\data\\Kaggle_catdog\\kaggle_catdog_train_128x128_3.pickle',
 # 	# root +'\\data\\Kaggle_catdog\\kaggle_catdog_train_128x128_4.pickle',
 # ]
-kaggle_catdog1 = Image_for_tf([root +'\\data\\Kaggle_catdog\\kaggle_catdog_train_128x128_1.pickle'], isOnehot=True)
+kaggle_catdog1 = Image_for_tf([root +'\\data\\Kaggle_catdog\\kaggle_catdog_train_64x64.pickle'], isOnehot=True)
 kaggle_catdog1.shuffle()
 
 # kaggle_catdog2 = Image_for_tf([root +'\\data\\Kaggle_catdog\\kaggle_catdog_train_128x128_2.pickle'], isOnehot=True)
@@ -37,7 +35,7 @@ kaggle_catdog1.shuffle()
 # kaggle_catdog4 = Image_for_tf([root +'\\data\\Kaggle_catdog\\kaggle_catdog_train_128x128_4.pickle'], isOnehot=True)
 # kaggle_catdog4.shuffle()
 
-kaggle_catdog_test = Image_for_tf([root +'\\data\\Kaggle_catdog\\kaggle_catdog_test_128x128.pickle'], isOnehot=True)
+kaggle_catdog_test = Image_for_tf([root +'\\data\\Kaggle_catdog\\kaggle_catdog_test_64x64.pickle'], isOnehot=True)
 kaggle_catdog_test.shuffle()
 
 data_training = np.concatenate([kaggle_catdog1.data])#, kaggle_catdog2.data, kaggle_catdog3.data, kaggle_catdog4.data])
@@ -50,19 +48,19 @@ print(data_test.shape)
 learning_rate = 0.001
 training_epochs = 100
 batch_size = 64
-display_step = 1
+display_step = 10
 
 with tf.name_scope('hidden') as scope:
 	params = params
 
 # Network Parameters
-n_input = 128*128*3 # 64*64*3
+n_input = 64*64*3 # 64*64*3
 n_classes = 2 # cat or dog
 
 # tf Graph input
 x = tf.placeholder(tf.float32, [None, n_input])
 y = tf.placeholder(tf.float32, [None, n_classes])
-keep_prob = tf.placeholder(tf.float32) #dropout (keep probability)
+keep_prob = tf.placeholder(tf.float32) # dropout (keep probability)
 
 data_saved = {'var_epoch_saved': tf.Variable(0)}
 
@@ -73,10 +71,6 @@ pred = conv_net(x, params)
 crossEntropy = tf.nn.softmax_cross_entropy_with_logits(logits=pred, labels=y)
 cost = tf.reduce_mean(crossEntropy)
 optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
-
-# Evaluate model
-correct_pred = tf.equal(tf.argmax(pred, 1), tf.argmax(y, 1))
-accuracy = tf.reduce_mean(tf.cast(correct_pred, tf.float32))
 
 with tf.name_scope('train'):
 	optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
@@ -96,7 +90,7 @@ def feed_dict(train):
 		k = params['dropout']
 	else:
 		batch_test = data_test[np.random.choice(data_test.shape[0], size=batch_size,  replace=True)]
-		xs, ys =  batch_test[:,:128*128*3], batch_test[:,128*128*3:]
+		xs, ys =  batch_test[:,:64*64*3], batch_test[:,64*64*3:]
 		k = 1.0
 	return {x: xs, y: ys, keep_prob: k}
 
@@ -129,8 +123,8 @@ with tf.Session() as sess:
 		# Training cycle
 		for epoch in range(epoch_saved, epoch_saved + training_epochs):
 			batch = data_training[np.random.choice(data_training.shape[0], size=batch_size,  replace=True)]
-			batch_x = batch[:, :128*128*3]
-			batch_y = batch[:, 128*128*3:]
+			batch_x = batch[:, :64*64*3]
+			batch_y = batch[:, 64*64*3:]
 			# Run optimization op (backprop)
 			sess.run(optimizer, feed_dict={x: batch_x, y: batch_y, keep_prob: params['dropout']})
 			if epoch % display_step == 0:
@@ -142,6 +136,7 @@ with tf.Session() as sess:
 
 			summary, acc = sess.run([merged, accuracy], feed_dict=feed_dict(False))
 			test_writer.add_summary(summary, epoch)
+			
 			print('Test Accuracy at step %s: %s' % (epoch, acc))
 
 			summary, _ = sess.run([merged, optimizer], feed_dict=feed_dict(True))

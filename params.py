@@ -29,7 +29,7 @@ params= {
 	
 	# 'W_fc1': tf.Variable(tf.random_normal([8*8*128, 8192]), name='W_fc1'),
 	# 'W_fc1': tf.Variable(tf.random_normal([8*8*128, 4096]), name='W_fc1'),
-	'W_fc1': tf.Variable(tf.random_normal([8*8*128*4, 4096]), name='W_fc1'), # 128x128
+	'W_fc1': tf.Variable(tf.random_normal([8*8*128, 4096]), name='W_fc1'), # 128x128
 	'W_fc2': tf.Variable(tf.random_normal([4096, 1000]), name='W_fc2'),
 	
 	# 4096 inputs, 2 outputs (class prediction)
