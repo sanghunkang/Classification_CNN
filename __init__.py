@@ -4,7 +4,7 @@
 # Author        : ...
 # Contact       : ...
 # Started on    : 20170310(yyyymmdd)
-# Last modified : 20170417(yyyymmdd)
+# Last modified : 20170413(yyyymmdd)
 # Project       : ...
 #############################################################################
 import sys, os
@@ -21,9 +21,6 @@ if __name__ == "__main__":
 
 		if cmd_input in ["run gpu"]:
 			import run_gpu
-
-		if cmd_input in ["run cpu"]:
-			import run_cpu
 
 		if cmd_input == "flush logs":
 			try:
@@ -45,5 +42,5 @@ if __name__ == "__main__":
 			except BaseException as e:
 				print(e)
 
-		if cmd_input in ["q","Q"]:
+		if cmd_input in ["q"]:
 			isFinish = True

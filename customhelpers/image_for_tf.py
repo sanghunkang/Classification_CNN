@@ -10,53 +10,49 @@ import pickle as pickle
 import numpy as np
 
 class Image_for_tf():
-	def __init__(self, filepaths, isOnehot=False):
-		self.isOnehot = isOnehot
+	def __init__(self, direc):
+		self.direc = direc
+		self.data = []
+		self.data_aux = []
+		self.onehot = False
 
-		with open(filepaths[0], "rb") as fo:
-			self.data = cPickle.load(fo, encoding="bytes")
-		if len(filepaths) > 1:
-			for filepath in filepaths:
-				with open(filepath, "rb") as fo:
-					raw_data = cPickle.load(fo, encoding="bytes")
-					self.data = np.concatenate([self.data, raw_data])
+	def import_data(self, filenames):
+		self.data = []
+		for filename in filenames:
+			with open(self.direc + filename, "rb") as fo:
+				raw_data = cPickle.load(fo, encoding="bytes")
+				# data_input =raw_data[b'data']
+				# data_output = raw_data[b'labels']
+				# data_tmp = np.c_[data_input, data_output]
+			self.data = raw_data
 
 	def filter_classes(self, classes):
-		"""
-		classes			: list, 
-		"""
 		data_tmp = []
 		for i in classes:
 			data_tmp.append(self.data[self.data[:,-1] == i])
 		self.data = np.concatenate(data_tmp)
 
-	def encode_onehot(self, n_classes, zero_columns=True):
-		"""
-		n_classes		: int, Biggest number for label
-		zero_columns	: boolean, Whether to shrink columns if only zeros appear
-		"""
-		if self.isOnehot == True:
+	def encode_onehot(self, zero_columns=True):
+		if self.onehot == True:
 			print("The sequence is already onehot encoded")
-		elif self.isOnehot == False:
+		elif self.onehot == False:
 			# Determine shape of the output one-hot matrix
 			seq = self.data[:,-1]
 			seq = seq.astype(int, copy=False)
 			n_rec = len(seq)
-
-			# Create the output one-hot label matrix 
+			n_classes = 10 # ???
+			# Create the output one-hot matrix 
 			mat = np.zeros((n_rec, n_classes))
 			mat[np.arange(n_rec), seq] = 1
 
 			# Omit all-zero columns if specified
 			if zero_columns == False:
 				ret = mat[:, np.apply_along_axis(np.count_nonzero, 0, mat) > 0]
-			
-			# Replace original labels with onehot-encoded labels 
 			self.data = np.c_[self.data[:,:-1], ret]
-			self.isOnehot = True
+			self.onehot = True
 
 	def normalize_axis1(self):
-		if self.isOnehot == True:
+		if self.onehot == True:
 			data_X = self.data[:,:-2]
 			len_seq = len(data_X)
 
@@ -76,7 +72,7 @@ class Image_for_tf():
 			self.data = np.c_[data_X1, data_X2, data_X3, self.data[:,-2:]]
 
 	def normalize_axis0(self):
-		if self.isOnehot == True:
+		if self.onehot == True:
 			data_X = self.data[:,:-2]
 			
 			data_X -= np.mean(data_X, axis=0) # zero-center
@@ -86,7 +82,7 @@ class Image_for_tf():
 
 
 	def whiten(self):
-		if self.isOnehot == True:
+		if self.onehot == True:
 			data_X = self.data[:,:-2]
 			
 			data_X -= np.mean(data_X, axis = 0) # zero-center
@@ -97,14 +93,15 @@ class Image_for_tf():
 			self.data = np.c_[data_X, self.data[:,:-2]]
 
 	def shuffle(self):
-		"""
-		Shuffle the sequnce of the data
-		"""
 		np.random.shuffle(self.data)
 
-	def get_batch(self, batchsize):
-		"""
-		Generate a random batch with input batchsize
-		batchsize		: int,
-		"""
+	def batch(self, batchsize):
 		pass
+
+# kaggle_catdog = Image_for_tf("C:\\dev\\lab_fda\\data\\Kaggle_catdog\\")
+# kaggle_catdog.import_data(["kaggle_catdog_train_64x64.pickle"])
+# kaggle_catdog.filter_classes([3,5])
+# kaggle_catdog.encode_onehot(zero_columns=False)
+# kaggle_catdog.whiten()
+# print(kaggle_catdog.data[:10])
+

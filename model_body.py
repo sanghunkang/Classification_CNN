@@ -1,7 +1,3 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-#############################################################################
-# Import 3rd party packages
 import numpy as np
 import tensorflow as tf
 
@@ -19,40 +15,34 @@ def maxpool2d(x, k=2):
 # Create model
 def conv_net(x, params):
 	# Reshape input picture
-	x = tf.reshape(x, shape=[-1, 128, 128, 3])
+	x = tf.reshape(x, shape=[-1, 64, 64, 3])
 
 	# Convolution and max pooling(down-sampling) Layer
 	conv11 = conv2d(x, params['W_conv11'], params['b_conv11'])
 	conv12 = conv2d(conv11, params['W_conv12'], params['b_conv12'])
 	conv13 = conv2d(conv12, params['W_conv13'], params['b_conv13'])
-	conv13p = maxpool2d(conv13, k=2)
+	conv13 = maxpool2d(conv13, k=2)
 
 	# Convolution and max pooling(down-sampling) Layer
-	conv21 = conv2d(conv13p, params['W_conv21'], params['b_conv21'])
+	conv21 = conv2d(conv13, params['W_conv21'], params['b_conv21'])
 	conv22 = conv2d(conv21, params['W_conv22'], params['b_conv22'])
 	conv23 = conv2d(conv22, params['W_conv23'], params['b_conv23'])
-	conv23p = maxpool2d(conv23, k=2)
+	conv23 = maxpool2d(conv23, k=2)
 
 	# Convolution and max pooling(down-sampling) Layer
-	conv31 = conv2d(conv23p, params['W_conv31'], params['b_conv31'])
+	conv31 = conv2d(conv23, params['W_conv31'], params['b_conv31'])
 	conv32 = conv2d(conv31, params['W_conv32'], params['b_conv32'])
 	conv33 = conv2d(conv32, params['W_conv33'], params['b_conv33'])
-	conv33p = maxpool2d(conv33, k=2)
+	conv33 = maxpool2d(conv33, k=2)
 
 	# Convolution and max pooling(down-sampling) Layer
-	# conv41 = conv2d(conv33p, params['W_conv41'], params['b_conv41'])
+	# conv41 = conv2d(conv33, params['W_conv41'], params['b_conv41'])
 	# conv42 = conv2d(conv41, params['W_conv42'], params['b_conv42'])
 	# conv43 = conv2d(conv42, params['W_conv43'], params['b_conv43'])
-	# conv43p = maxpool2d(conv43, k=2)
+	# conv43 = maxpool2d(conv43, k=2)
 
-	# # Convolution and max pooling(down-sampling) Layer
-	# conv51 = conv2d(conv43p, params['W_conv51'], params['b_conv51'])
-	# conv52 = conv2d(conv51, params['W_conv52'], params['b_conv52'])
-	# conv53 = conv2d(conv52, params['W_conv53'], params['b_conv53'])
-	# conv53p = maxpool2d(conv53, k=2)
-
-	# Reshape output from the final convolution layer to fit fully connected layer input
-	fc1 = tf.reshape(conv33p, [-1, params['W_fc1'].get_shape().as_list()[0]])
+	# Reshape conv2 output to fit fully connected layer input
+	fc1 = tf.reshape(conv33, [-1, params['W_fc1'].get_shape().as_list()[0]])
 
 	# Fully connected layer and Apply Dropout
 	fc1 = tf.add(tf.matmul(fc1, params['W_fc1']), params['b_fc1'])
