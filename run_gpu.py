@@ -13,7 +13,8 @@ from customhelpers.image_for_tf import Image_for_tf
 from params import params
 from model_body import conv_net
 
-root = os.path.dirname(os.getcwd())
+# root = os.path.dirname(os.getcwd())
+root = "C:\\dev\\lab_fda"
 # Import data
 # kaggle_catdog = Image_for_tf(root +'\\data\\Kaggle_catdog\\kaggle_catdog_train_64x64.pickle')
 # kaggle_catdog.filter_classes([3,5])
@@ -45,9 +46,9 @@ print(data_test.shape)
 
 # BUILDING THE COMPUTATIONAL GRAPH
 # Parameters
-learning_rate = 0.001
-training_epochs = 100
-batch_size = 64
+learning_rate = 0.01
+training_epochs = 500
+batch_size = 256
 display_step = 10
 
 with tf.name_scope('hidden') as scope:
@@ -68,12 +69,13 @@ data_saved = {'var_epoch_saved': tf.Variable(0)}
 pred = conv_net(x, params)
 
 # Define loss and optimiser
+
+# optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
+
+# with tf.name_scope('train'):
 crossEntropy = tf.nn.softmax_cross_entropy_with_logits(logits=pred, labels=y)
 cost = tf.reduce_mean(crossEntropy)
 optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
-
-with tf.name_scope('train'):
-	optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
 
 # Evaluate model
 with tf.name_scope('accuracy'):

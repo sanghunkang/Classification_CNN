@@ -45,11 +45,11 @@ def conv_net_inter(x, params):
 	conv33 = conv2d(conv32, params['W_conv33'], params['b_conv33'])
 	conv33p = maxpool2d(conv33, k=2)
 
-	# Convolution and max pooling(down-sampling) Layer
-	conv41 = conv2d(conv33p, params['W_conv41'], params['b_conv41'])
-	conv42 = conv2d(conv41, params['W_conv42'], params['b_conv42'])
-	conv43 = conv2d(conv42, params['W_conv43'], params['b_conv43'])
-	conv43p = maxpool2d(conv43, k=2)
+	# # Convolution and max pooling(down-sampling) Layer
+	# conv41 = conv2d(conv33p, params['W_conv41'], params['b_conv41'])
+	# conv42 = conv2d(conv41, params['W_conv42'], params['b_conv42'])
+	# conv43 = conv2d(conv42, params['W_conv43'], params['b_conv43'])
+	# conv43p = maxpool2d(conv43, k=2)
 
 	return conv13
 

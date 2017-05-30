@@ -18,14 +18,9 @@ if __name__ == "__main__":
 
 		if cmd_input == "-e":
 			import extract_model
-
-		if cmd_input in ["run gpu"]:
+		elif cmd_input in ["run gpu"]:
 			import run_gpu
-
-		if cmd_input in ["run cpu"]:
-			import run_cpu
-
-		if cmd_input == "flush logs":
+		elif cmd_input == "flush-logs":
 			try:
 				os.chdir(dirpath + ".\\logs\\train\\")
 				for f in os.listdir("."):
@@ -36,14 +31,14 @@ if __name__ == "__main__":
 					os.remove(f)
 			except BaseException as e:
 				print(e)
-
-		if cmd_input == "flush model":
+		elif cmd_input == "flush-model":
 			try:
 				os.chdir(dirpath + ".\\model\\")
 				for f in os.listdir("."):
 					os.remove(f)
 			except BaseException as e:
 				print(e)
-
-		if cmd_input in ["q","Q"]:
+		elif cmd_input in ["q","Q"]:
 			isFinish = True
+		else:
+			print("Invalid Command")

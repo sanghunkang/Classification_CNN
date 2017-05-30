@@ -19,7 +19,7 @@ def maxpool2d(x, k=2):
 # Create model
 def conv_net(x, params):
 	# Reshape input picture
-	x = tf.reshape(x, shape=[-1, 128, 128, 3])
+	x = tf.reshape(x, shape=[-1, 64, 64, 3])
 
 	# Convolution and max pooling(down-sampling) Layer
 	conv11 = conv2d(x, params['W_conv11'], params['b_conv11'])
