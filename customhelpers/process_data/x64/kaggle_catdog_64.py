@@ -2,12 +2,15 @@
 # -*- coding: utf-8 -*-
 #############################################################################
 # Import built-in modules
-import os
+import os, sys
 
 # Import 3rd party packages
 import _pickle as cPickle
 import pickle as pickle
 import numpy as np
+
+sys.path.append("C:\\dev\\lab_fda\\classification-cnn")
+sys.path.append("C:\\dev\\lab_fda\\classification-cnn\\customhelpers")
 
 from image_handler import Image_handler
 direc = "C:\\dev\\lab_fda\\data\\kaggle_catdog\\"
