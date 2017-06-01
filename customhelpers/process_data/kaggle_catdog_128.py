@@ -31,27 +31,19 @@ direc = get_direc_data_processed(SYSTEM)
 seq_pickle = np.zeros(shape=(20000, 64*64*3 + 1))
 
 isIndex = True
-for i in range(0,10000):
-	# try: 
+for i in range(0,10000): 
 	path_img = direc + "\\train\\cat." + str(i) + ".jpg"
 	img_processed =  process_image(path_img, (64,64))
 	seq_pickle[i] = np.append(img_processed, [3])
-	# except FileNotFoundError:
-	# 	isIndex = False
 	print(i)
 
 for j in range(0,10000):
-	# try: 
 	path_img = direc + "\\train\\dog." + str(j) + ".jpg"
 	img_processed =  process_image(path_img, (64,64))
 	seq_pickle[10000+j] = np.append(img_processed, [5])
-	# except FileNotFoundError:
-	# 	isIndex = False
 	print(j)
 
 make_pickle(seq_pickle, direc + "\\kaggle_catdog_train_64x64_TEST.pickle")
-# with open(direc + "\\kaggle_catdog_train_64x64_TEST.pickle", 'wb') as handle:
-#     pickle.dump(seq_pickle, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 # for i in range(0,2):
 # 	try: 
@@ -92,6 +84,3 @@ make_pickle(seq_pickle, direc + "\\kaggle_catdog_train_64x64_TEST.pickle")
 # 		isIndex = False
 # 	# j += 1
 # 	print(j)
-
-# with open(direc + "kaggle_catdog_test_64x64_TEST.pickle", 'wb') as handle:
-#     pickle.dump(seq_pickle, handle, protocol=pickle.HIGHEST_PROTOCOL)
