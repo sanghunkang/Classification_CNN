@@ -8,16 +8,16 @@ import os
 import numpy as np
 import tensorflow as tf
 
-from customhelpers.image_handler import Image_handler
+# from customhelpers.image_handler import Image_handler
 from customhelpers.image_for_tf import Image_for_tf
-from customhelpers.customhelpers import show_from_serialized_img
+# from customhelpers.customhelpers import show_from_serialized_img
 
 from model_body import conv_net
 from params import params
 
 # Import data
 kaggle_catdog = Image_for_tf(os.path.dirname(os.getcwd()) +'\\data\\Kaggle_catdog\\')
-kaggle_catdog.import_data(['kaggle_catdog_train_64x64.pickle'])
+kaggle_catdog.import_data(['kaggle_catdog_train_64x64_TEST.pickle'])
 kaggle_catdog.filter_classes([3,5])
 kaggle_catdog.encode_onehot(zero_columns=False)
 kaggle_catdog.shuffle()
