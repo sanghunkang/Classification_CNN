@@ -61,7 +61,7 @@ for j in range(0,10000):
 	# j += 1
 	print(j)
 
-with open(direc + "kaggle_catdog_train_64x64.pickle", 'wb') as handle:
+with open(direc + "kaggle_catdog_train_64x64_TEST.pickle", 'wb') as handle:
     pickle.dump(seq_pickle, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 for i in range(0,2500):
@@ -107,5 +107,5 @@ for j in range(0,2500):
 	# j += 1
 	print(j)
 
-with open(direc + "kaggle_catdog_test_64x64.pickle", 'wb') as handle:
+with open(direc + "kaggle_catdog_test_64x64_TEST.pickle", 'wb') as handle:
     pickle.dump(seq_pickle, handle, protocol=pickle.HIGHEST_PROTOCOL)

@@ -20,14 +20,14 @@ from model_body import conv_net
 
 # Import data
 kaggle_catdog = Image_for_tf(os.path.dirname(os.getcwd()) +'\\data\\Kaggle_catdog\\')
-kaggle_catdog.import_data(['kaggle_catdog_train_64x64.pickle'])
+kaggle_catdog.import_data(['kaggle_catdog_train_64x64_TEST.pickle'])
 kaggle_catdog.filter_classes([3,5])
 kaggle_catdog.encode_onehot(zero_columns=False)
 # kaggle_catdog.normalize_axis0()
 kaggle_catdog.shuffle()
 
 kaggle_catdog_test = Image_for_tf(os.path.dirname(os.getcwd()) +'\\data\\Kaggle_catdog\\')
-kaggle_catdog_test.import_data(['kaggle_catdog_test_64x64.pickle'])
+kaggle_catdog_test.import_data(['kaggle_catdog_test_64x64_TEST.pickle'])
 kaggle_catdog_test.filter_classes([3,5])
 kaggle_catdog_test.encode_onehot(zero_columns=False)
 # kaggle_catdog_test.normalize_axis0()
