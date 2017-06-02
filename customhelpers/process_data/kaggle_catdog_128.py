@@ -29,29 +29,29 @@ seq_pickle = np.zeros(shape=(20000, 64*64*3 + 1))
 
 for i in range(0,10000): 
 	path_img = direc + "\\train\\cat." + str(i) + ".jpg"
-	img_processed =  process_image(path_img, (64,64))
+	img_processed =  process_image(path_img, (64,64), "CHW")
 	seq_pickle[i] = np.append(img_processed, [3])
 	print(i)
 
 for j in range(0,10000):
 	path_img = direc + "\\train\\dog." + str(j) + ".jpg"
-	img_processed =  process_image(path_img, (64,64))
+	img_processed =  process_image(path_img, (64,64), "CHW")
 	seq_pickle[10000+j] = np.append(img_processed, [5])
 	print(j)
 
 make_pickle(seq_pickle, direc + "\\kaggle_catdog_train_64x64_TEST.pickle")
 
+seq_pickle = np.zeros(shape=(5000, 64*64*3 + 1))
 for i in range(0,2500):
-	path_img = direc + "test\\cat." + str(10000+i) + ".jpg"
-	img_processed =  process_image(path_img, (64,64))
+	path_img = direc + "\\test\\cat." + str(10000+i) + ".jpg"
+	img_processed =  process_image(path_img, (64,64), "CHW")
 	seq_pickle[i] = np.append(img_processed, [3])
 	print(i)
 
 for j in range(0,2500):
-	path_img = direc + "test\\dog." + str(10000+j) + ".jpg"
-	img_processed =  process_image(path_img, (64,64))
-	seq_pickle[i] = np.append(img_processed, [5])
-	seq_pickle[2500+j] = saechi_ser
+	path_img = direc + "\\test\\dog." + str(10000+j) + ".jpg"
+	img_processed =  process_image(path_img, (64,64), "CHW")
+	seq_pickle[2500+j] = np.append(img_processed, [5])
 	print(j)
 
 make_pickle(seq_pickle, direc + "\\kaggle_catdog_test_64x64_TEST.pickle")
