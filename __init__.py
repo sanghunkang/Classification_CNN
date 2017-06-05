@@ -19,7 +19,7 @@ if __name__ == "__main__":
 		if cmd_input == "-e":
 			import extract_model
 
-		if cmd_input in ["run gpu"]:
+		if cmd_input in ["run", "run gpu"]:
 			import run_gpu
 
 		if cmd_input == "flush logs":

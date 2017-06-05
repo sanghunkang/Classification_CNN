@@ -1,40 +1,24 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-#############################################################################
+
 # Import built-in modules
 import os
 
-# Import packages
-import _pickle as cPickle
-import matplotlib.pyplot as plt
+# Import external packages
 import numpy as np
 import tensorflow as tf
 
-from numpy import genfromtxt
+# Import custom modules and packages
+from customhelpers.import_data import import_data
+from model_body import conv_net
 from params import params
 
-from customhelpers.image_handler import Image_handler
-from customhelpers.image_for_tf import Image_for_tf
-from customhelpers.customhelpers import show_from_serialized_img
-from model_body import conv_net
+# Define some system constants
+DIR_DATA = "C:\\dev\\lab_fda\\data\\kaggle_catdog\\"
 
 # Import data
-kaggle_catdog = Image_for_tf(os.path.dirname(os.getcwd()) +'\\data\\Kaggle_catdog\\')
-kaggle_catdog.import_data(['kaggle_catdog_train_64x64_TEST.pickle'])
-kaggle_catdog.filter_classes([3,5])
-kaggle_catdog.encode_onehot(zero_columns=False)
-# kaggle_catdog.normalize_axis0()
-kaggle_catdog.shuffle()
-
-kaggle_catdog_test = Image_for_tf(os.path.dirname(os.getcwd()) +'\\data\\Kaggle_catdog\\')
-kaggle_catdog_test.import_data(['kaggle_catdog_test_64x64_TEST.pickle'])
-kaggle_catdog_test.filter_classes([3,5])
-kaggle_catdog_test.encode_onehot(zero_columns=False)
-# kaggle_catdog_test.normalize_axis0()
-kaggle_catdog_test.shuffle()
-
-data_training = kaggle_catdog.data
-data_test = kaggle_catdog_test.data
+data_training = import_data(DIR_DATA + 'kaggle_catdog_train_64x64_TEST.pickle')
+data_test = import_data(DIR_DATA + 'kaggle_catdog_test_64x64_TEST.pickle')
 
 # BUILDING THE COMPUTATIONAL GRAPH
 # Parameters
@@ -54,22 +38,15 @@ n_classes = 2 # cat or dog
 x = tf.placeholder(tf.float32, [None, n_input])
 y = tf.placeholder(tf.float32, [None, n_classes])
 keep_prob = tf.placeholder(tf.float32) #dropout (keep probability)
-
 data_saved = {'var_epoch_saved': tf.Variable(0)}
 
 # Construct model
 pred = conv_net(x, params)
 
 # Define loss and optimiser
-crossEntropy = tf.nn.softmax_cross_entropy_with_logits(logits=pred, labels=y)
-cost = tf.reduce_mean(crossEntropy)
-optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
-
-# Evaluate model
-correct_pred = tf.equal(tf.argmax(pred, 1), tf.argmax(y, 1))
-accuracy = tf.reduce_mean(tf.cast(correct_pred, tf.float32))
-
 with tf.name_scope('train'):
+	crossEntropy = tf.nn.softmax_cross_entropy_with_logits(logits=pred, labels=y)
+	cost = tf.reduce_mean(crossEntropy)
 	optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
 
 # Evaluate model
@@ -152,8 +129,9 @@ with tf.Session() as sess:
 		# Save the variables
 		epoch_new = epoch_saved + training_epochs
 		sess.run(data_saved['var_epoch_saved'].assign(epoch_saved + training_epochs))
-		print(data_saved['var_epoch_saved'].eval())
 		save_path = saver.save(sess, '.\\model\\model.ckpt')
+
+		print(data_saved['var_epoch_saved'].eval())
 		print('Model saved in file: %s' % save_path)
 
 		
